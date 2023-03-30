@@ -2,7 +2,6 @@ package com.olvera.travelguide.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.olvera.travelguide.BuildConfig
 import com.olvera.travelguide.home.domain.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
