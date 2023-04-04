@@ -18,21 +18,61 @@ class HomeViewModel @Inject constructor(
     var state by mutableStateOf(HomeState())
         private set
 
+    fun onSearchTextChange(newText: String) {
+        state = state.copy(
+            searchText = newText
+        )
+    }
 
-
-    init {
-        viewModelScope.launch {
-            repository.getTravelGuide(state.searchText).onSuccess {
-                println(it)
-            }.onFailure {
-                println("Hubo un error")
+    fun onSettingsChange(action: HomeFilterDialogActions) {
+        when (action) {
+            HomeFilterDialogActions.OnApplyClick -> {
+                state = state.copy(
+                    filterSettingsBackup = state.filterSettings,
+                    showDialog = false
+                )
+            }
+            HomeFilterDialogActions.OnMuseumClick -> {
+                state = state.copy(
+                    filterSettings = state.filterSettings.copy(
+                        museums = !state.filterSettings.museums
+                    )
+                )
+            }
+            HomeFilterDialogActions.OnPeopleMinus -> {
+                state = state.copy(
+                    filterSettings = state.filterSettings.copy(
+                        people = state.filterSettings.people - 1
+                    )
+                )
+            }
+            HomeFilterDialogActions.OnPeoplePlus -> {
+                state = state.copy(
+                    filterSettings = state.filterSettings.copy(
+                        people = state.filterSettings.people + 1
+                    )
+                )
+            }
+            HomeFilterDialogActions.OnRestaurantClick -> {
+                state = state.copy(
+                    filterSettings = state.filterSettings.copy(
+                        restaurant = !state.filterSettings.restaurant
+                    )
+                )
             }
         }
     }
 
-    fun onSearchTextChange(newText: String) {
+    fun onFilterClick() {
         state = state.copy(
-            searchText = newText
+            showDialog = true
+        )
+    }
+
+    fun onFilterDismiss() {
+        state = state.copy(
+            showDialog = false,
+            filterSettings = state.filterSettingsBackup
         )
     }
 

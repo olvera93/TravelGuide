@@ -1,12 +1,14 @@
 package com.olvera.travelguide.home.presentation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.olvera.travelguide.home.presentation.components.HomeFilterButton
+import com.olvera.travelguide.home.presentation.components.HomeFilterDialog
 import com.olvera.travelguide.home.presentation.components.HomeSearchBar
 
 @Composable
@@ -16,18 +18,40 @@ fun HomeScreen(
 
     val state = viewModel.state
 
+    if (state.showDialog) {
+        HomeFilterDialog(
+            onDismiss = {
+                viewModel.onFilterDismiss()
+            },
+            filterSettings = state.filterSettings,
+            onAction = {
+                viewModel.onSettingsChange(it)
+            }
+        )
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "A donde viajas?")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HomeSearchBar(
+                onSearch = {
+                    viewModel.search()
+                },
+                placeholder = "Pais, Ciudad",
+                inputText = state.searchText,
+                onValueChange = { viewModel.onSearchTextChange(it) },
 
-        HomeSearchBar(
-            onSearch = {
-                       viewModel.search()
-            },
-            placeholder = "Pais, Ciudad",
-            inputText = state.searchText,
-            onValueChange = { viewModel.onSearchTextChange(it) },
-            modifier = Modifier.fillMaxWidth()
-        )
+                )
+
+            HomeFilterButton(onClick = { viewModel.onFilterClick() })
+        }
+
 
     }
 
