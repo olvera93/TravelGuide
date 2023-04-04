@@ -9,12 +9,12 @@ import javax.inject.Inject
 class HomeRepositoryImpl @Inject constructor(
     private val chatGptApi: ChatgptApi
 ) :  HomeRepository {
-    override suspend fun getTravelGuide(): Result<String> {
+    override suspend fun getTravelGuide(location: String): Result<String> {
         return try {
             val request = ChatRequestDto(
                 maxTokens = 1500,
                 model = "test-davicn",
-                prompt = "Soy una guia",
+                prompt = "Soy una guia $location",
                 temperature = 0.7
             )
             val information = chatGptApi.getTravelInformation(request)
