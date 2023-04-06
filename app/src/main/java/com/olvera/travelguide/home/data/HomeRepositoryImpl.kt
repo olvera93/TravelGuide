@@ -2,6 +2,7 @@ package com.olvera.travelguide.home.data
 
 import com.olvera.travelguide.home.data.remote.ChatgptApi
 import com.olvera.travelguide.home.data.remote.dto.ChatRequestDto
+import com.olvera.travelguide.home.domain.HomeFilterSettings
 import com.olvera.travelguide.home.domain.HomeRepository
 import javax.inject.Inject
 
@@ -9,12 +10,20 @@ import javax.inject.Inject
 class HomeRepositoryImpl @Inject constructor(
     private val chatGptApi: ChatgptApi
 ) :  HomeRepository {
-    override suspend fun getTravelGuide(location: String): Result<String> {
+    override suspend fun getTravelGuide(location: String, settings: HomeFilterSettings): Result<String> {
         return try {
+
+            var places = ""
+
+            if (settings.restaurant) places += "Restaurantes, "
+            if (settings.museums) places += "Museos, "
+
+            val placesToVisit = if (places.isNotEmpty()) "y quiero visitar: $places" else ""
+
             val request = ChatRequestDto(
                 maxTokens = 1500,
-                model = "test-davicn",
-                prompt = "Soy una guia $location",
+                model = "text-davinci-003",
+                prompt = "Sos una guía de viaje. Te voy a dar mi ubicación, y me vas a sugerir lugares para visitar cerca. También te voy a dar los tipo de lugares que quiero visitar. Aparte, quiero que me sugieras lugares de un tipo similar a los que te mencione que estén cerca de mi primera ubicación. Estoy en $location $placesToVisit. Solo quiero los precios de cada lugar en USD. Ordenarlos por tipo de lugar. No repitas los lugares.",
                 temperature = 0.7
             )
             val information = chatGptApi.getTravelInformation(request)

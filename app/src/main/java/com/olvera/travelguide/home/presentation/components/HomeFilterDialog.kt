@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.olvera.travelguide.home.presentation.HomeFilterDialogActions
-import com.olvera.travelguide.home.presentation.HomeFilterSettings
+import com.olvera.travelguide.home.domain.HomeFilterSettings
 
 @Composable
 fun HomeFilterDialog(

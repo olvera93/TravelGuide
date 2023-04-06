@@ -18,6 +18,16 @@ class HomeViewModel @Inject constructor(
     var state by mutableStateOf(HomeState())
         private set
 
+    fun search() {
+        viewModelScope.launch {
+            repository.getTravelGuide(state.searchText, state.filterSettings).onSuccess {
+                println(it)
+            }.onFailure {
+                println("Hubo un error")
+            }
+        }
+    }
+
     fun onSearchTextChange(newText: String) {
         state = state.copy(
             searchText = newText
@@ -75,16 +85,5 @@ class HomeViewModel @Inject constructor(
             filterSettings = state.filterSettingsBackup
         )
     }
-
-    fun search() {
-        viewModelScope.launch {
-            repository.getTravelGuide(state.searchText).onSuccess {
-                println(it)
-            }.onFailure {
-                println("Hubo un error")
-            }
-        }
-    }
-
 
 }

@@ -1,4 +1,4 @@
-package com.olvera.travelguide.home.presentation
+package com.olvera.travelguide.home.domain
 
 data class HomeFilterSettings(
     val people: Int = 1,
