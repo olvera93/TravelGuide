@@ -37,6 +37,9 @@ class HomeViewModel @Inject constructor(
 
     fun search() {
         viewModelScope.launch {
+            state = state.copy(
+                isLoading = true
+            )
             repository.getTravelGuide(state.searchText, state.filterSettings).onSuccess {
                 state = state.copy(
                     chatReply = it
@@ -44,6 +47,9 @@ class HomeViewModel @Inject constructor(
             }.onFailure {
                 println("Hubo un error")
             }
+            state = state.copy(
+                isLoading = false
+            )
         }
     }
 

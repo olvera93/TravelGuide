@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import com.olvera.travelguide.home.presentation.components.HomeFilterButton
 import com.olvera.travelguide.home.presentation.components.HomeFilterDialog
 import com.olvera.travelguide.home.presentation.components.HomePopularFilter
 import com.olvera.travelguide.home.presentation.components.HomeSearchBar
+import com.olvera.travelguide.ui.theme.DarkGreen
 
 @Composable
 fun HomeScreen(
@@ -64,7 +66,8 @@ fun HomeScreen(
         item {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -82,54 +85,64 @@ fun HomeScreen(
             }
         }
 
-        state.chatReply?.let {
+        if (state.isLoading) {
             item {
-                Text(text = it, modifier = Modifier.padding(horizontal = 16.dp))
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = DarkGreen)
+                }
             }
-        } ?: item {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "Lugares populares",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                HomePopularFilter(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                    selectedRegion = state.selectedRegion,
-                    selectRegion = {
-                        viewModel.onRegionSelect(it)
-                    }
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(state.popularPlaces) {
-                        Box(
-                            modifier = Modifier
-                                .size(180.dp, 250.dp)
-                                .clip(RoundedCornerShape(20.dp))
-                                .clickable { viewModel.onSearchTextChange("${it.country}, ${it.city}") }
-                        ) {
-                            AsyncImage(
-                                model = it.image,
-                                contentDescription = "${it.country}, ${it.city}",
-                                contentScale = ContentScale.Crop
-                            )
-                            Text(
-                                text = "${it.country}, ${it.city}",
+        } else {
+            state.chatReply?.let {
+                item {
+                    Text(text = it, modifier = Modifier.padding(horizontal = 16.dp))
+                }
+            } ?: item {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Lugares populares",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HomePopularFilter(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        selectedRegion = state.selectedRegion,
+                        selectRegion = {
+                            viewModel.onRegionSelect(it)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    ) {
+                        items(state.popularPlaces) {
+                            Box(
                                 modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .padding(12.dp),
-                                color = Color.White,
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Black
-                            )
+                                    .size(180.dp, 250.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .clickable { viewModel.onSearchTextChange("${it.country}, ${it.city}") }
+                            ) {
+                                AsyncImage(
+                                    model = it.image,
+                                    contentDescription = "${it.country}, ${it.city}",
+                                    contentScale = ContentScale.Crop
+                                )
+                                Text(
+                                    text = "${it.country}, ${it.city}",
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .padding(12.dp),
+                                    color = Color.White,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Black
+                                )
+                            }
                         }
                     }
                 }
