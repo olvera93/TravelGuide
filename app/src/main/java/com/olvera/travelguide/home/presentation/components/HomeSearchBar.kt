@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.olvera.travelguide.ui.theme.BackgroundGray
-import com.olvera.travelguide.ui.theme.DarkGreen
 
 @Composable
 fun HomeSearchBar(
@@ -42,8 +41,7 @@ fun HomeSearchBar(
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-            cursorColor = DarkGreen
+            unfocusedBorderColor = Color.Transparent
         )
 
     )

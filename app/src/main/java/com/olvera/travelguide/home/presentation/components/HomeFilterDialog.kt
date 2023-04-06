@@ -1,6 +1,5 @@
 package com.olvera.travelguide.home.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.olvera.travelguide.home.presentation.HomeFilterDialogActions
 import com.olvera.travelguide.home.domain.model.HomeFilterSettings
-import com.olvera.travelguide.ui.theme.DarkGreen
 
 @Composable
 fun HomeFilterDialog(
@@ -32,7 +30,6 @@ fun HomeFilterDialog(
                     .padding(16.dp)
                     .defaultMinSize(minHeight = 53.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = DarkGreen,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(50.dp),

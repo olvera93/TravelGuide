@@ -24,7 +24,6 @@ import com.olvera.travelguide.home.presentation.components.HomeFilterButton
 import com.olvera.travelguide.home.presentation.components.HomeFilterDialog
 import com.olvera.travelguide.home.presentation.components.HomePopularFilter
 import com.olvera.travelguide.home.presentation.components.HomeSearchBar
-import com.olvera.travelguide.ui.theme.DarkGreen
 
 @Composable
 fun HomeScreen(
@@ -88,7 +87,7 @@ fun HomeScreen(
         if (state.isLoading) {
             item {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = DarkGreen)
+                    CircularProgressIndicator()
                 }
             }
         } else {
