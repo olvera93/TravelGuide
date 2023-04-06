@@ -2,8 +2,10 @@ package com.olvera.travelguide.home.data
 
 import com.olvera.travelguide.home.data.remote.ChatgptApi
 import com.olvera.travelguide.home.data.remote.dto.ChatRequestDto
-import com.olvera.travelguide.home.domain.HomeFilterSettings
+import com.olvera.travelguide.home.domain.model.HomeFilterSettings
 import com.olvera.travelguide.home.domain.HomeRepository
+import com.olvera.travelguide.home.domain.model.Place
+import com.olvera.travelguide.home.domain.model.Region
 import javax.inject.Inject
 
 
@@ -31,5 +33,18 @@ class HomeRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun getPopularPlaces(): Result<List<Place>> {
+        return Result.success(
+            listOf(
+                Place("USA", "New York", Region.AMERICA, "https://images.pexels.com/photos/2224861/pexels-photo-2224861.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
+                Place("Argentina", "Salta", Region.AMERICA, "https://images.pexels.com/photos/13430634/pexels-photo-13430634.jpeg?auto=compress"),
+                Place("España", "Barcelona", Region.EUROPE, "https://www.fodors.com/wp-content/uploads/2022/03/Hero-UPDATEBarcelona-iStock-1320014700-1.jpg"),
+                Place("Australia", "Sydney", Region.OCEANIA, "https://images.squarespace-cdn.com/content/v1/55ee34aae4b0bf70212ada4c/1577545161018-1F9Z9ZZQG9JO2O4WCWQX/keith-zhu-qaNcz43MeY8-unsplash+%281%29.jpg"),
+                Place("Japon", "Tokio", Region.ASIA, "https://lonelyplanetes.cdnstatics2.com/sites/default/files/styles/max_1300x1300/public/fotos/japon_tokio_shibuya_shutterstock_666197236_f11photo_shutterstock.jpg"),
+                Place("Italia", "Roma", Region.EUROPE, "https://www.thediaryofanomad.com/wp-content/w3-webp/uploads/2020/11/rome-for-3-days-in-rome-itinerary-vatican-dome-view.jpgw3.webp")
+            )
+        )
     }
 }

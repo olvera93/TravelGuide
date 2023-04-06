@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.olvera.travelguide.home.domain.HomeRepository
+import com.olvera.travelguide.home.domain.model.Region
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,10 +19,28 @@ class HomeViewModel @Inject constructor(
     var state by mutableStateOf(HomeState())
         private set
 
+    init {
+        viewModelScope.launch {
+            repository.getPopularPlaces()
+                .onSuccess {
+                    state = state.copy(
+                        popularPlaces = it,
+                        popularPlacesBackup = it
+                    )
+                }
+                .onFailure {
+                    println("Hubo un error")
+
+                }
+        }
+    }
+
     fun search() {
         viewModelScope.launch {
             repository.getTravelGuide(state.searchText, state.filterSettings).onSuccess {
-                println(it)
+                state = state.copy(
+                    chatReply = it
+                )
             }.onFailure {
                 println("Hubo un error")
             }
@@ -76,6 +95,19 @@ class HomeViewModel @Inject constructor(
     fun onFilterClick() {
         state = state.copy(
             showDialog = true
+        )
+    }
+
+    fun onBackPresssed() {
+        state = state.copy(
+            chatReply = null
+        )
+    }
+
+    fun onRegionSelect(region: Region) {
+        state = state.copy(
+            selectedRegion = region,
+            popularPlaces = if (region != Region.ALL) state.popularPlacesBackup.filter { it.region == region } else state.popularPlacesBackup
         )
     }
 
