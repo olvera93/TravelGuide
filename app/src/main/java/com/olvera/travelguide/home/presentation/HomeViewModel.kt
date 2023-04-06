@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.olvera.travelguide.home.domain.HomeRepository
+import com.olvera.travelguide.home.domain.model.Region
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +18,40 @@ class HomeViewModel @Inject constructor(
 
     var state by mutableStateOf(HomeState())
         private set
+
+    init {
+        viewModelScope.launch {
+            repository.getPopularPlaces()
+                .onSuccess {
+                    state = state.copy(
+                        popularPlaces = it,
+                        popularPlacesBackup = it
+                    )
+                }
+                .onFailure {
+                    println("Hubo un error")
+
+                }
+        }
+    }
+
+    fun search() {
+        viewModelScope.launch {
+            state = state.copy(
+                isLoading = true
+            )
+            repository.getTravelGuide(state.searchText, state.filterSettings).onSuccess {
+                state = state.copy(
+                    chatReply = it
+                )
+            }.onFailure {
+                println("Hubo un error")
+            }
+            state = state.copy(
+                isLoading = false
+            )
+        }
+    }
 
     fun onSearchTextChange(newText: String) {
         state = state.copy(
@@ -69,22 +104,24 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    fun onBackPresssed() {
+        state = state.copy(
+            chatReply = null
+        )
+    }
+
+    fun onRegionSelect(region: Region) {
+        state = state.copy(
+            selectedRegion = region,
+            popularPlaces = if (region != Region.ALL) state.popularPlacesBackup.filter { it.region == region } else state.popularPlacesBackup
+        )
+    }
+
     fun onFilterDismiss() {
         state = state.copy(
             showDialog = false,
             filterSettings = state.filterSettingsBackup
         )
     }
-
-    fun search() {
-        viewModelScope.launch {
-            repository.getTravelGuide(state.searchText).onSuccess {
-                println(it)
-            }.onFailure {
-                println("Hubo un error")
-            }
-        }
-    }
-
 
 }

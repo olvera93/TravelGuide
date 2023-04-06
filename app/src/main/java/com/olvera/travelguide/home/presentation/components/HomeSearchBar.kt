@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.olvera.travelguide.ui.theme.BackgroundGray
 
 @Composable
 fun HomeSearchBar(
@@ -29,7 +30,7 @@ fun HomeSearchBar(
         placeholder = {
             Text(text = placeholder)
         },
-        modifier = modifier.background(color = Color.LightGray, shape = RoundedCornerShape(86.dp)),
+        modifier = modifier.background(color = BackgroundGray, shape = RoundedCornerShape(86.dp)),
         singleLine = true,
         trailingIcon = {
             HomeSearchButton(

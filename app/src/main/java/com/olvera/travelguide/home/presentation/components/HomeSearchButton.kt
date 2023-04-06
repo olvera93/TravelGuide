@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.olvera.travelguide.ui.theme.DarkGreen
 
 @Composable
 fun HomeSearchButton(
@@ -21,7 +22,9 @@ fun HomeSearchButton(
 
     IconButton(
         onClick = onClick,
-        modifier = modifier.background(color = Color.Green, shape = CircleShape)
+        modifier = modifier.background(
+            color = DarkGreen, shape = CircleShape
+        )
     ) {
         Icon(imageVector = icon, contentDescription = "Search", tint = Color.White)
     }
